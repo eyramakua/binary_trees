@@ -14,13 +14,13 @@ avl_t *r_insert_node(avl_t **tree, avl_t *parent, avl_t **new, int nval)
 
 	if (*tree == NULL)
 		return (*new = binary_tree_node(parent, nval));
-	if ((*tree)->n > nval)
+	if (nval < (*tree)->n)
 	{
 		(*tree)->left = r_insert_node(&(*tree)->left, *tree, new, nval);
 		if ((*tree)->left == NULL)
 			return (NULL);
 	}
-	else if ((*tree)->n < nval)
+	else if (nval > (*tree)->n)
 	{
 		(*tree)->right = r_insert_node(&(*tree)->right, *tree, new, nval);
 		if ((*tree)->right == NULL)
@@ -28,23 +28,23 @@ avl_t *r_insert_node(avl_t **tree, avl_t *parent, avl_t **new, int nval)
 	}
 	else
 	{
-		return (*tree);
+		return (NULL);
 	}
 	bval = binary_tree_balance(*tree);
-	if (bval > 1 && (*tree)->left->n > nval)
+	if (bval > 1 && nval < (*tree)->left->n)
 	{
 		*tree = binary_tree_rotate_right(*tree);
 	}
-	else if (bval > 1 && (*tree)->left->n < nval)
+	else if (bval > 1 && nval > (*tree)->left->n)
 	{
 		(*tree)->left = binary_tree_rotate_left((*tree)->left);
 		*tree = binary_tree_rotate_right(*tree);
 	}
-	else if (bval < -1 && (*tree)->right->n < nval)
+	else if (bval < -1 && nval > (*tree)->right->n)
 	{
 		*tree = binary_tree_rotate_left(*tree);
 	}
-	else if (bval < -1 && (*tree)->right->n > nval)
+	else if (bval < -1 && nval < (*tree)->right->n)
 	{
 		(*tree)->right = binary_tree_rotate_right((*tree)->right);
 		*tree = binary_tree_rotate_left(*tree);
